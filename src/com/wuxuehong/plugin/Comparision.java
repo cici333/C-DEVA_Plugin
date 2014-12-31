@@ -176,7 +176,7 @@ public class Comparision extends Plugin implements NewAlgorithm {
 	 */
 	public void createComposite(final Composite composite, final String[] algorithm,
 			final HashMap<String, RGB> colorlist) {
-		
+		/*
 		File outFile = new File("Myplugins/out.txt");
 		try {
 			outFile.createNewFile();
@@ -186,7 +186,7 @@ public class Comparision extends Plugin implements NewAlgorithm {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 		if (currentComposite != null)
 			currentComposite.dispose();
@@ -321,7 +321,8 @@ public class Comparision extends Plugin implements NewAlgorithm {
 		button6.setText("Sensitivity,Precision");
 		button4 = new Button(group3, SWT.NONE);
 		button4.setText("Start");
-		if(proteins.size()==0)button4.setEnabled(false);
+		if(proteins.size()==0)
+			button4.setEnabled(false);
 		button4.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
 				if(button1.getSelection()) {
@@ -380,11 +381,10 @@ public class Comparision extends Plugin implements NewAlgorithm {
 				Vector<String> complex = proteins.get(j);
 				for(int k=0;k<v.length;k++){
 					Vector<Node> predit = v[k];
-					if(os(complex,predit)>=os)
-						{
+					if(os(complex,predit)>=os){
 						count++;
 						break;
-						}
+					}
 				}
 			}
 			for(int k=0;k<v.length;k++){
@@ -1043,16 +1043,12 @@ public class Comparision extends Plugin implements NewAlgorithm {
 				str = br.readLine(); 
 			}
 			
-			button4.setEnabled(true);
-		//	statueLabel.setText("Total Known Complexes:"+proteins.size());
+			button4.setEnabled(true);;
 			if(!description.isEmpty()){
-		//		descriptionLabel.setText(description);
 				statueLabel.setToolTipText(description);
 			}
-				statueLabel.setText("Total Size:"+proteins.size());
-			
-			
-			
+			statueLabel.setText("Total Size:"+proteins.size());
+					
 			br.close();
 			MessageBox box = new MessageBox(new Shell(), SWT.YES);
 			box.setText("Tip");

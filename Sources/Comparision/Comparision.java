@@ -176,7 +176,7 @@ public class Comparision extends Plugin implements NewAlgorithm {
 	 */
 	public void createComposite(final Composite composite, final String[] algorithm,
 			final HashMap<String, RGB> colorlist) {
-		
+		/*
 		File outFile = new File("Myplugins/out.txt");
 		try {
 			outFile.createNewFile();
@@ -186,7 +186,7 @@ public class Comparision extends Plugin implements NewAlgorithm {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 		if (currentComposite != null)
 			currentComposite.dispose();
