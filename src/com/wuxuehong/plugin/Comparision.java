@@ -91,6 +91,7 @@ public class Comparision extends Plugin implements NewAlgorithm {
 		private HashMap<String, Vector<Node>[]> resultList;
 		
 		private HashMap<String,Vector<Node>[]>  unqiue;
+		private int selectedIndex; //the selected index of defaultList
 		@Override
 		public void variableInit() {
 			// TODO Auto-generated method stub
@@ -103,6 +104,7 @@ public class Comparision extends Plugin implements NewAlgorithm {
 		    secondChartslist = new HashMap<Integer,HashMap<String,Vector<LinePoint>>>();
 		    firstChartslist = new HashMap<Integer,HashMap<String,int[]>>();
 		    proteins = new Vector<Vector<String>>(); // 保存从文件读取的已知蛋白信息
+		    selectedIndex = 0;
 		}
 	/**
 	 * WindowShowAt show the opened window default value is 0 ,it indicates that
@@ -113,12 +115,12 @@ public class Comparision extends Plugin implements NewAlgorithm {
 				HashMap<String, Vector<Node>[]> resultList, Composite composite,
 				HashMap<String, RGB> colorlist) {
 		        unqiue = resultList;
-		        if(algorithm.length==0){
-		        	WindowShowAt = 0;
-		        }
+		 //       if(algorithm.length==0){
+		 //       	WindowShowAt = 0;
+		//        }
 		     	if (WindowShowAt == 0){
-				createComposite(composite, algorithm,colorlist);
-				return ;
+		     		createComposite(composite, algorithm,colorlist);
+		     		return ;
 		      	}
 		     	this.resultList = resultList;
 		     	new NewThread(algorithm,composite,colorlist);
@@ -213,7 +215,6 @@ public class Comparision extends Plugin implements NewAlgorithm {
 			}
 		});
 		
-		
 		final String[] defaultfiles = {"Human [Cell-2012]","Human [PCDq]","Human [MIPS-2012]","Human(Core) [MIPS-2012]",
 				"Yeast [CYC2008]", "Yeast [Nature-2012]", 
 				"Fruit Fly [Cell-2011]",
@@ -232,18 +233,19 @@ public class Comparision extends Plugin implements NewAlgorithm {
 		defaultList.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				int index = defaultList.getSelectionIndex();
-				if(index >= 0 && index < 4){					
-					openKnownFile(filePaths[0]+"/"+defaultfiles[index]);
+				selectedIndex = defaultList.getSelectionIndex();
+				
+				if(selectedIndex >= 0 && selectedIndex < 4){					
+					openKnownFile(filePaths[0]+"/"+defaultfiles[selectedIndex]);
 				}
-				if(index >= 4 && index < 6){					
-					openKnownFile(filePaths[1]+"/"+defaultfiles[index]);
+				if(selectedIndex >= 4 && selectedIndex < 6){					
+					openKnownFile(filePaths[1]+"/"+defaultfiles[selectedIndex]);
 				}
-				if(index == 6){					
-					openKnownFile(filePaths[2]+"/"+defaultfiles[index]);
+				if(selectedIndex == 6){					
+					openKnownFile(filePaths[2]+"/"+defaultfiles[selectedIndex]);
 				}
-				if(index >= 7){					
-					openKnownFile(filePaths[3]+"/"+defaultfiles[index]);
+				if(selectedIndex >= 7){					
+					openKnownFile(filePaths[3]+"/"+defaultfiles[selectedIndex]);
 				}
 			}
 		});
@@ -296,7 +298,7 @@ public class Comparision extends Plugin implements NewAlgorithm {
 		});
 		
 		
-		defaultList.select(0);
+		defaultList.select(selectedIndex);
 		
 
 		Group group2 = new Group(currentComposite, SWT.NONE);
@@ -331,12 +333,20 @@ public class Comparision extends Plugin implements NewAlgorithm {
 				else if(button2.getSelection()){
 					formula = 1;
 				}
+				
 				if(button6.getSelection()){
 					WindowShowAt = 2;
-					createSnPrComposite(algorithm, "Sensitivity adn Precision", null, composite, colorlist, snpr);
+		//			drawCharts(algorithm, resultList, composite, colorlist);
+					NewThread t = new NewThread(algorithm, composite, colorlist);
+	//				t.run();
+
+	//				createSnPrComposite(algorithm, "Sensitivity adn Precision", null, composite, colorlist, snpr);
 				}else if(button3.getSelection()){
 					WindowShowAt = 1;
-				createChart(algorithm,"Comparision with the known Complexes",composite,colorlist,comparison,null,null);
+	//			createChart(algorithm,"Comparision with the known Complexes",composite,colorlist,comparison,null,null);
+		//			drawCharts(algorithm, resultList, composite, colorlist);
+					NewThread t = new NewThread(algorithm, composite, colorlist);
+	//				t.run();
 				}
 			}
 		});
@@ -603,25 +613,31 @@ public class Comparision extends Plugin implements NewAlgorithm {
 	}
 
 	/**
-	 * calculate the os between the predicted complex predict and the known
-	 * complex complex
+	 * calculate the os between the predicted complex (predict) and the known complex (complex)
 	 * 
 	 * @param complex
 	 * @param predict
 	 * @return
 	 */
-	public float os(Vector<String> complex, Vector predict) {
+	public float os(Vector<String> complex, Vector<Node> predict) {
 		int i=0, a, b;
 		a = complex.size();
 		b = predict.size();
-		Set<String> container = new HashSet<String>(complex);
-		int c = container.size();
-		for(int j=0;j<b;j++){
-			Node node = (Node)predict.get(j);
-			container.add(node.getNodeID());
+	//	Set<String> container = new HashSet<String>(complex);
+	//	int c = container.size();
+	//	for(int j=0;j<b;j++){
+	//		Node node = (Node)predict.get(j);
+	//		container.add(node.getNodeID());
+	//	}
+		for(String c : complex){
+			for(Node p : predict){
+				if(c.equalsIgnoreCase(p.getNodeID())){
+					i++;
+				}
+			}
 		}
-		int d = container.size();
-		i = b-(d-c);
+	//	int d = container.size();
+	//	i = b-(d-c);
 		float result = 0;
 		if (formula == 0)
 			result = (float) i * (float) i / ((float) a * (float) b);
