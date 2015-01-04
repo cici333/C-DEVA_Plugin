@@ -115,9 +115,9 @@ public class Comparision extends Plugin implements NewAlgorithm {
 				HashMap<String, Vector<Node>[]> resultList, Composite composite,
 				HashMap<String, RGB> colorlist) {
 		        unqiue = resultList;
-		 //       if(algorithm.length==0){
-		 //       	WindowShowAt = 0;
-		//        }
+		        if(algorithm.length==0){
+		        	WindowShowAt = 0;
+		        }
 		     	if (WindowShowAt == 0){
 		     		createComposite(composite, algorithm,colorlist);
 		     		return ;
