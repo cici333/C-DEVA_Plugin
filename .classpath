@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="lib/jpf.jar"/>
 	<classpathentry kind="lib" path="lib/jxp.jar"/>
 	<classpathentry kind="lib" path="lib/jxl.jar"/>
+	<classpathentry kind="lib" path="lib/c-deva-interface.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
