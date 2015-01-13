@@ -1,5 +1,6 @@
 package com.wuxuehong.plugin;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.wuxuehong.bean.Edge;
@@ -23,6 +24,9 @@ public class Cluster {
 	
 	/** The set of boundary edges */
 //	private HashSet<Edge> boundaryEdges;
+	
+	/** The set of boundary nodes */
+	private ArrayList<Node> boundrayNodes;
 	
 	/** The set of neighbours of this cluster */
 	HashSet<Node> neighbours;
@@ -86,43 +90,67 @@ public class Cluster {
 		return tempOutdegree / ( tempIndegree + tempOutdegree +Parameters.PENALTY);		
 	}
 	
-	public void addOneNeighbour(Node candidate){
+	public void addOneNeighbour(ArrayList<Node> candidates){
 		
-		nodeSet.add(candidate);
-		for(Node n : candidate.getNeighbours()){
-			if(nodeSet.contains(n)){
-				inDegree ++;
-				outDegree --;
-			}else{
-				outDegree ++;
-				neighbours.add(n);
+		for(Node candidate : candidates){
+			nodeSet.add(candidate);
+			for(Node n : candidate.getNeighbours()){
+				if(nodeSet.contains(n)){
+					inDegree ++;
+					outDegree --;
+				}else{
+					outDegree ++;
+					neighbours.add(n);
+				}
 			}
+			neighbours.remove(candidate);
 		}
-		neighbours.remove(candidate);
 	}
 	
-	public void removeOneNode(Node candidate){
-		
-		boolean flag = false;
-		nodeSet.remove(candidate);
-		for(Node n : candidate.getNeighbours()){
-			if(nodeSet.contains(n)){
-				inDegree --;
-				outDegree ++;
-			}else{
-				outDegree --;
-				for(Node nn : n.getNeighbours()){
-					if(nodeSet.contains(nn)){
-						flag = true;
-						break;
+	public void removeOneNode(ArrayList<Node> candidates){
+		boolean flag;
+		for(Node candidate : candidates){
+			flag = false;
+			nodeSet.remove(candidate);
+			for(Node n : candidate.getNeighbours()){
+				if(nodeSet.contains(n)){
+					inDegree --;
+					outDegree ++;
+				}else{
+					outDegree --;
+					for(Node nn : n.getNeighbours()){
+						if(nodeSet.contains(nn)){
+							flag = true;
+							break;
+						}
+					}
+					if(!flag){
+						neighbours.remove(n);
 					}
 				}
-				if(!flag){
-					neighbours.remove(n);
+			}
+			neighbours.add(candidate);
+		}
+		
+	}
+	
+	public ArrayList<Node> getBoundrayNodes(){
+		boundrayNodes = new ArrayList<Node>();
+		for(Node node : nodeSet){
+			for(Node nei : node.getNeighbours()){
+				if(neighbours.contains(nei)){
+					boundrayNodes.add(node);
+					break;
 				}
 			}
-		}
-		neighbours.add(candidate);
+		}		
+		return boundrayNodes;
+	}
+	
+	public boolean isRootNode(Node n){
+		boolean isRoot = false;
+		
+		return false;
 	}
 	
 	public double getCohesiveness(){
@@ -132,6 +160,10 @@ public class Cluster {
 
 	public HashSet<Node> getNeighbours() {
 		return neighbours;
+	}
+
+	public HashSet<Node> getNodeSet() {
+		return nodeSet;
 	}
 	
 	

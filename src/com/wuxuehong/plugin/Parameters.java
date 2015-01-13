@@ -10,6 +10,9 @@ public class Parameters {
 	/** The minimal size of the clusters*/
 	public static  int MIN_SIZE;
 	
+	/** Is single mode*/
+	public static boolean SINGLE_MODE;
+	
 	
 	
 }
