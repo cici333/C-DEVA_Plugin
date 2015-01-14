@@ -1,30 +1,39 @@
 package com.wuxuehong.plugin;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 
 import com.wuxuehong.bean.Node;
 import com.wuxuehong.interfaces.GraphInfo;
 
 public class ClusterOneAlgorithm {
-	/** The sorted list of nodes in current graph according to their degree */
-	private PriorityQueue<Node> sortedNodeList;
+	/** the seed list(sorted nodes) */
+	SeedList seeds;
 	
+	Iterator<Node> seedIt;
+	
+	/** Clusters before merged */
+	ArrayList<Cluster> originClusters;
 	
 	/**
-	 * Sort all nodes according to their nodes*/
-	private void getInitialSeeds(){
-		sortedNodeList = new PriorityQueue<Node>(new Comparator<Node>() {
-			@Override
-			public int compare(Node o1, Node o2) {
-				// TODO Auto-generated method stub
-				return o2.getNeighbour_NUM() - o1.getNeighbour_NUM();
-			}
-		});
+	 * Step1 : generate original clusters*/
+	private void generateOriginalCluster(){
+		/* Sort all nodes according to their nodes*/
+		seeds = new SeedList();
+		seedIt = seeds.iterator();
+		originClusters = new ArrayList<Cluster>();
 		
-		sortedNodeList.addAll(GraphInfo.nodelist);
-	}
+		while(seedIt.hasNext()){
+			Cluster tempC = expandingCluster(seedIt.next());
+			seeds.updateUsedNodes(tempC); 			
+			originClusters.add(tempC);
+		}
+	}	
 	
 	/** 
 	 * Expanding the cluster from the seed node
@@ -104,7 +113,11 @@ public class ClusterOneAlgorithm {
 			
 	}
 	
-	
+	/** 
+	 * Step 2 : Merge original clusters*/
+	private void mergeClusters(){
+		
+	}
 	
 	
 	
