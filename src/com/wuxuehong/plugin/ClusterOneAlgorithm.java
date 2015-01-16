@@ -7,25 +7,45 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.PriorityQueue;
+import java.util.Vector;
 
 import com.wuxuehong.bean.Node;
 import com.wuxuehong.interfaces.GraphInfo;
 
 public class ClusterOneAlgorithm {
-	/** the seed list(sorted nodes) */
-	SeedList seeds;
 	
-	Iterator<Node> seedIt;
 	
 	/** Clusters before merged */
 	ArrayList<Cluster> originClusters;
+	
+	public Vector<Node>[] MainProcess(){
+		Vector<Node>[] resultArray;
+		
+		generateOriginalCluster();
+		
+		ConCurrentMerge result = new ConCurrentMerge();
+		
+		ArrayList<Vector<Node>> rs = result.MainProcess(originClusters);	
+		resultArray = new Vector [rs.size()];
+		int i = 0;
+		for(Vector<Node> cluster : rs){
+			resultArray[i] = cluster;
+			i++;
+		}
+		 
+		return resultArray;
+		
+	}
+	
 	
 	/**
 	 * Step1 : generate original clusters*/
 	private void generateOriginalCluster(){
 		/* Sort all nodes according to their nodes*/
-		seeds = new SeedList();
-		seedIt = seeds.iterator();
+		/** the seed list(sorted nodes) */
+		SeedList seeds = new SeedList();
+		Iterator<Node> seedIt = seeds.iterator();
+		
 		originClusters = new ArrayList<Cluster>();
 		
 		while(seedIt.hasNext()){
@@ -113,11 +133,7 @@ public class ClusterOneAlgorithm {
 			
 	}
 	
-	/** 
-	 * Step 2 : Merge original clusters*/
-	private void mergeClusters(){
-		
-	}
+	
 	
 	
 	

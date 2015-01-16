@@ -38,10 +38,8 @@ public class ClusterOne extends Plugin implements NewAlgorithm {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				MessageBox mb = new MessageBox(new Shell(),SWT.NONE);
-				mb.setText("测试算法插件开发");
-				mb.setMessage("当前蛋白质网络信息:节点数"+GraphInfo.nodelist.size()+"      边数:"+GraphInfo.edgelist.size());
-				mb.open();
+				ClusterOneAlgorithm clusterOneAlg = new ClusterOneAlgorithm();
+				
 			}
 		});
 		return null;
